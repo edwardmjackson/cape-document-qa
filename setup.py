@@ -14,20 +14,7 @@
 
 from package_settings import NAME, VERSION, PACKAGES, DESCRIPTION
 from setuptools import setup
-from pathlib import Path
-import json
-import urllib.request
-from functools import lru_cache
-
-
-@lru_cache(maxsize=50)
-def _get_github_sha(github_install_url: str):
-    """From the github_install_url get the hash of the latest commit"""
-    repository = Path(github_install_url).stem.split('#egg', 1)[0]
-    organisation = Path(github_install_url).parent.stem
-    with urllib.request.urlopen(f'https://api.github.com/repos/{organisation}/{repository}/commits/master') as response:
-        return json.loads(response.read())['sha']
-
+from pathlib import Path 
 
 setup(
     name=NAME,
@@ -51,11 +38,7 @@ setup(
                       'scikit-learn==0.19.1',
                       'scipy==0.19.1',
                       'tensorflow==1.7.0',
-                      'cape_machine_reader==' + _get_github_sha(
-                          'git+https://github.com/bloomsburyai/cape-machine-reader#egg=cape_machine_reader')],
-    dependency_links=[
-        'git+https://github.com/bloomsburyai/cape-machine-reader#egg=cape_machine_reader-' + _get_github_sha(
-            'git+https://github.com/bloomsburyai/cape-machine-reader#egg=cape_machine_reader'),
+                      'cape_machine_reader @ git+https://github.com/edwardmjackson/cape-machine-reader'            
     ],
     package_data={
         '': ['*.*'],
